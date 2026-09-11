@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Location Lab</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 100px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 10px;
+            background: #222;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        #result {
+            margin-top: 25px;
+            line-height: 2;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Location Lab</h1>
+
+    <p>
+        برای ادامه، اجازه‌ی دسترسی به موقعیت مکانی لازم است.
+    </p>
+
+    <button onclick="getLocation()">
+        ادامه
+    </button>
+
+    <div id="result"></div>
+
+</div>
+
+
+<script>
+
+function getLocation() {
+
+    const result =
+        document.getElementById("result");
+
+
+    // بررسی پشتیبانی مرورگر
+    if (!navigator.geolocation) {
+
+        result.innerHTML =
+            "مرورگر شما از موقعیت مکانی پشتیبانی نمی‌کند.";
+
+        return;
+    }
+
+
+    result.innerHTML =
+        "در حال درخواست دسترسی به موقعیت مکانی...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        // -------------------------
+        // SUCCESS
+        // -------------------------
+
+        function(position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+            const accuracy =
+                position.coords.accuracy;
+
+
+            result.innerHTML =
+                "دسترسی تأیید شد. در حال ورود...";
+
+
+            fetch("/location", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    latitude: latitude,
+                    longitude: longitude,
+                    accuracy: accuracy
+
+                })
+
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                if (data.success) {
+
+                    // Location دریافت شده؛
+                    // حالا اجازه ورود داریم.
+                    window.location.href = "/dashboard";
+
+                } else {
+
+                    result.innerHTML =
+                        "خطا در ثبت موقعیت.";
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+                result.innerHTML =
+                    "خطا در ارتباط با سرور.";
+
+            });
+
+        },
+
+
+        // -------------------------
+        // ERROR
+        // -------------------------
+
+        function(error) {
+
+            if (error.code === 1) {
+
+                // کاربر اجازه نداده است.
+                // اجازه ورود به بخش اصلی ندارد.
+
+                window.location.href =
+                    "/access-denied";
+
+            }
+
+            else if (error.code === 2) {
+
+                result.innerHTML =
+                    "موقعیت مکانی در دسترس نیست.";
+
+            }
+
+            else if (error.code === 3) {
+
+                result.innerHTML =
+                    "زمان دریافت موقعیت تمام شد.";
+
+            }
+
+            else {
+
+                result.innerHTML =
+                    "خطایی در دریافت موقعیت رخ داد.";
+
+            }
+
+        },
+
+
+        // -------------------------
+        // OPTIONS
+        // -------------------------
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+
+    );
+
+}
+
+</script>
+
+</body>
+</html>

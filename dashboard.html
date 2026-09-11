@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Location Dashboard</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .empty {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Location Dashboard</h1>
+
+    <div id="locations">
+        در حال دریافت اطلاعات...
+    </div>
+
+</div>
+
+<script>
+
+async function loadLocations() {
+
+    const container =
+        document.getElementById("locations");
+
+    try {
+
+        const response =
+            await fetch("/locations");
+
+        const locations =
+            await response.json();
+
+        if (locations.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty">
+                    هنوز هیچ موقعیتی ثبت نشده است.
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        locations.forEach((location, index) => {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "card";
+
+            card.innerHTML = `
+
+                <strong>
+                    Location #${index + 1}
+                </strong>
+
+                <p>
+                    Latitude:
+                    ${location.latitude}
+                </p>
+
+                <p>
+                    Longitude:
+                    ${location.longitude}
+                </p>
+
+                <p>
+                    Accuracy:
+                    ${location.accuracy} متر
+                </p>
+
+                <p>
+                    Time:
+                    ${location.time}
+                </p>
+
+            `;
+
+            container.appendChild(card);
+
+        });
+
+    } catch (error) {
+
+        container.innerHTML = `
+            خطا در دریافت اطلاعات.
+        `;
+
+        console.error(error);
+
+    }
+}
+
+
+loadLocations();
+
+</script>
+
+</body>
+</html>
