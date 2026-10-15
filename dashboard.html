@@ -1,144 +1,666 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Location Dashboard</title>
+    <title>DailySense Dashboard</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            padding: 30px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .navbar {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e9f2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            color: #172033;
+        }
+
+        .brand span {
+            color: #5b67f1;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #5d687b;
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #28b77b;
         }
 
         .container {
-            max-width: 900px;
-            margin: auto;
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 35px 25px 50px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .header p {
+            color: #707b8f;
+            font-size: 14px;
+        }
+
+        .refresh-btn {
+            border: none;
+            background: #5b67f1;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .refresh-btn:hover {
+            opacity: 0.9;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
         .card {
             background: white;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e7ebf2;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 5px 18px rgba(30, 45, 80, 0.04);
         }
 
-        h1 {
-            text-align: center;
+        .card-label {
+            color: #788397;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .card-value {
+            font-size: 30px;
+            font-weight: 700;
+            color: #172033;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid #e7ebf2;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 5px 18px rgba(30, 45, 80, 0.04);
+        }
+
+        .section-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #edf0f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            font-size: 18px;
+        }
+
+        .section-header span {
+            color: #8a94a6;
+            font-size: 13px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #f0f2f6;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #fafbfc;
+            color: #7a8496;
+            font-weight: 600;
+        }
+
+        td {
+            color: #344055;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 6px;
+            background: #eef0ff;
+            color: #5360dc;
+            font-size: 12px;
         }
 
         .empty {
             text-align: center;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
+            padding: 35px;
+            color: #8a94a6;
+            font-size: 14px;
         }
 
-    </style>
+        .footer {
+            text-align: center;
+            color: #9aa3b2;
+            font-size: 13px;
+            margin-top: 35px;
+        }
 
+        @media (max-width: 800px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 0 18px;
+            }
+
+            .container {
+                padding: 25px 15px 40px;
+            }
+
+            .header {
+                align-items: flex-start;
+                gap: 20px;
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+    <nav class="navbar">
 
-    <h1>Location Dashboard</h1>
+        <div class="brand">
+            Daily<span>Sense</span>
+        </div>
 
-    <div id="locations">
-        در حال دریافت اطلاعات...
-    </div>
+        <div class="status">
+            <div class="status-dot"></div>
+            Dashboard Online
+        </div>
 
-</div>
+    </nav>
 
-<script>
 
-async function loadLocations() {
+    <main class="container">
 
-    const container =
-        document.getElementById("locations");
+        <div class="header">
 
-    try {
+            <div>
+                <h1>Dashboard</h1>
 
-        const response =
-            await fetch("/locations");
+                <p>
+                    Overview of DailySense activity
+                </p>
+            </div>
 
-        const locations =
-            await response.json();
+            <button
+                class="refresh-btn"
+                onclick="loadDashboard()"
+            >
+                Refresh
+            </button>
 
-        if (locations.length === 0) {
+        </div>
 
-            container.innerHTML = `
-                <div class="empty">
-                    هنوز هیچ موقعیتی ثبت نشده است.
+
+        <!-- Statistics -->
+
+        <section class="cards">
+
+            <div class="card">
+
+                <div class="card-label">
+                    Total Readings
                 </div>
-            `;
 
-            return;
+                <div
+                    class="card-value"
+                    id="readingsCount"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-label">
+                    Total Locations
+                </div>
+
+                <div
+                    class="card-value"
+                    id="locationsCount"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-label">
+                    Last Activity
+                </div>
+
+                <div
+                    class="card-value"
+                    id="lastActivity"
+                    style="font-size: 18px;"
+                >
+                    —
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Readings -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>
+                    Recent Readings
+                </h2>
+
+                <span>
+                    Latest 50 records
+                </span>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Situation</th>
+                            <th>Focus</th>
+                            <th>Created</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="readingsTable">
+
+                        <tr>
+                            <td
+                                colspan="4"
+                                class="empty"
+                            >
+                                Loading...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Locations -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>
+                    Recent Locations
+                </h2>
+
+                <span>
+                    Latest 50 records
+                </span>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Accuracy</th>
+                            <th>Created</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="locationsTable">
+
+                        <tr>
+                            <td
+                                colspan="5"
+                                class="empty"
+                            >
+                                Loading...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <div class="footer">
+            DailySense Administration Panel
+        </div>
+
+    </main>
+
+
+    <script>
+
+        function formatDate(value) {
+
+            if (!value) {
+                return "—";
+            }
+
+            const date = new Date(value);
+
+            if (isNaN(date.getTime())) {
+                return value;
+            }
+
+            return date.toLocaleString();
         }
 
-        container.innerHTML = "";
 
-        locations.forEach((location, index) => {
+        async function loadStats() {
 
-            const card =
+            const response =
+                await fetch("/dashboard/stats");
+
+            if (!response.ok) {
+                throw new Error("Failed to load statistics");
+            }
+
+            const data =
+                await response.json();
+
+            document.getElementById(
+                "readingsCount"
+            ).textContent = data.readings;
+
+
+            document.getElementById(
+                "locationsCount"
+            ).textContent = data.locations;
+
+
+            const latest =
+                data.latest_location ||
+                data.latest_reading;
+
+            document.getElementById(
+                "lastActivity"
+            ).textContent = formatDate(latest);
+        }
+
+
+        async function loadReadings() {
+
+            const response =
+                await fetch("/dashboard/readings");
+
+            if (!response.ok) {
+                throw new Error("Failed to load readings");
+            }
+
+            const readings =
+                await response.json();
+
+            const table =
+                document.getElementById(
+                    "readingsTable"
+                );
+
+            if (readings.length === 0) {
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="empty">
+                            No readings yet.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            table.innerHTML =
+                readings.map(reading => `
+
+                    <tr>
+
+                        <td>
+                            ${reading.id}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                reading.situation
+                            )}
+                        </td>
+
+                        <td>
+                            <span class="badge">
+                                ${escapeHtml(
+                                    reading.focus
+                                )}
+                            </span>
+                        </td>
+
+                        <td>
+                            ${formatDate(
+                                reading.created_at
+                            )}
+                        </td>
+
+                    </tr>
+
+                `).join("");
+        }
+
+
+        async function loadLocations() {
+
+            const response =
+                await fetch("/locations");
+
+            if (!response.ok) {
+                throw new Error("Failed to load locations");
+            }
+
+            const locations =
+                await response.json();
+
+            const table =
+                document.getElementById(
+                    "locationsTable"
+                );
+
+
+            if (locations.length === 0) {
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty">
+                            No locations yet.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            table.innerHTML =
+                locations.map(location => `
+
+                    <tr>
+
+                        <td>
+                            ${location.id}
+                        </td>
+
+                        <td>
+                            ${Number(
+                                location.latitude
+                            ).toFixed(6)}
+                        </td>
+
+                        <td>
+                            ${Number(
+                                location.longitude
+                            ).toFixed(6)}
+                        </td>
+
+                        <td>
+                            ${
+                                location.accuracy !== null
+                                ? Math.round(
+                                    location.accuracy
+                                  ) + " m"
+                                : "—"
+                            }
+                        </td>
+
+                        <td>
+                            ${formatDate(
+                                location.created_at
+                            )}
+                        </td>
+
+                    </tr>
+
+                `).join("");
+        }
+
+
+        function escapeHtml(value) {
+
+            const div =
                 document.createElement("div");
 
-            card.className = "card";
+            div.textContent =
+                value ?? "";
 
-            card.innerHTML = `
-
-                <strong>
-                    Location #${index + 1}
-                </strong>
-
-                <p>
-                    Latitude:
-                    ${location.latitude}
-                </p>
-
-                <p>
-                    Longitude:
-                    ${location.longitude}
-                </p>
-
-                <p>
-                    Accuracy:
-                    ${location.accuracy} متر
-                </p>
-
-                <p>
-                    Time:
-                    ${location.time}
-                </p>
-
-            `;
-
-            container.appendChild(card);
-
-        });
-
-    } catch (error) {
-
-        container.innerHTML = `
-            خطا در دریافت اطلاعات.
-        `;
-
-        console.error(error);
-
-    }
-}
+            return div.innerHTML;
+        }
 
 
-loadLocations();
+        async function loadDashboard() {
 
-</script>
+            try {
+
+                await Promise.all([
+                    loadStats(),
+                    loadReadings(),
+                    loadLocations()
+                ]);
+
+            } catch (error) {
+
+                console.error(
+                    "Dashboard error:",
+                    error
+                );
+
+                alert(
+                    "Could not load dashboard data."
+                );
+            }
+        }
+
+
+        loadDashboard();
+
+    </script>
 
 </body>
 </html>

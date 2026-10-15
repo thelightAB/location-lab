@@ -1,0 +1,17 @@
+# Secrets
+.env
+.env.*
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local databases
+dailysense.db
+*.sqlite
+*.sqlite3
+
+# Other
+.pytest_cache/

